@@ -4,6 +4,10 @@ const bcrypt = require('../adapters/bcrypt.adapter')
 
 const login = async (username, password) => {
 
+    if (!username || !password) {
+        throw 'Invalid credentials'
+    }
+
     const user = await userModel.findOne({
         username,
     })
@@ -20,7 +24,15 @@ const login = async (username, password) => {
     }
 }
 
-const register = async ({ username, password }) => {
+const register = async ({ username, password, confirmPassword  }) => {
+
+    if (!username || !password || !confirmPassword) {
+        throw 'Invalid credentials'
+    }
+
+    if (password !== confirmPassword) {
+        throw 'Passwords do not match'
+    }
 
     const isUserExist = await userModel.findOne({ username })
     console.log(isUserExist)
